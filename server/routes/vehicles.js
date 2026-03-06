@@ -116,6 +116,7 @@ router.put('/:id', auth, async (req, res) => {
 // @access  Private
 router.delete('/:id', auth, async (req, res) => {
     if (process.env.DEMO_MODE === 'true') {
+        demoDb.vehicles = demoDb.vehicles.filter(v => v._id !== req.params.id);
         return res.json({ msg: 'Vehicle removed' });
     }
 
