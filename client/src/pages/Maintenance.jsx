@@ -11,14 +11,16 @@ const PageContainer = styled.div`
 `;
 
 const AlertBanner = styled.div`
-  background: rgba(255, 187, 0, 0.1);
-  border: 1px solid #ffbb00;
-  padding: 1.5rem;
-  border-radius: 12px;
+  background: rgba(255, 187, 0, 0.05);
+  border: 1px solid rgba(255, 187, 0, 0.3);
+  padding: 1.5rem 2rem;
+  border-radius: 16px;
   display: flex;
   align-items: center;
   gap: 1.5rem;
   color: #ffbb00;
+  box-shadow: 0 0 20px rgba(255, 187, 0, 0.1);
+  backdrop-filter: blur(10px);
 `;
 
 const ScheduleGrid = styled.div`
@@ -28,11 +30,19 @@ const ScheduleGrid = styled.div`
 `;
 
 const ScheduleCard = styled.div`
-  background: var(--bg-secondary);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  padding: 1.5rem;
-  border-radius: 12px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  padding: 1.8rem;
+  border-radius: 16px;
   position: relative;
+  transition: var(--transition-smooth);
+
+  &:hover {
+    border-color: var(--glass-border-highlight);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  }
 `;
 
 const Maintenance = () => {

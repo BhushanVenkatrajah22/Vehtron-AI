@@ -1,32 +1,36 @@
 import { useState, useEffect } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
+import styled from 'styled-components'
+
 import Dashboard from './pages/Dashboard'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Vehicles from './pages/Vehicles'
 import VehicleDetails from './pages/VehicleDetails'
+import Maintenance from './pages/Maintenance'
+import Diagnostics from './pages/Diagnostics'
+import Settings from './pages/Settings'
+
 import Navbar from './components/layout/Navbar'
 import Sidebar from './components/layout/Sidebar'
-import styled from 'styled-components'
 
 const AppContainer = styled.div`
   display: flex;
   min-height: 100vh;
-  background: radial-gradient(circle at top right, #1a1a2e, #0a0a0f);
+  position: relative;
 `;
 
 const MainContent = styled.main`
   flex: 1;
   padding: 2rem;
-  margin-left: 260px;
-  @media (max-width: 768px) {
+  /* Adjust margin for the floating sidebar (280px width + 20px left margin + 20px right gap) */
+  margin-left: ${props => props.$isAuthenticated ? '320px' : '0'};
+  transition: margin-left 0.3s ease-in-out;
+  
+  @media (max-width: 1024px) {
     margin-left: 0;
   }
 `;
-
-import Maintenance from './pages/Maintenance'
-import Diagnostics from './pages/Diagnostics'
-import Settings from './pages/Settings'
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
@@ -39,9 +43,10 @@ function App() {
     return (
         <AppContainer>
             {isAuthenticated && <Sidebar />}
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
                 <Navbar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
-                <MainContent>
+                <MainContent $isAuthenticated={isAuthenticated}>
                     <Routes>
                         <Route path="/login" element={!isAuthenticated ? <Login setIsAuthenticated={setIsAuthenticated} /> : <Navigate to="/" />} />
                         <Route path="/register" element={!isAuthenticated ? <Register setIsAuthenticated={setIsAuthenticated} /> : <Navigate to="/" />} />

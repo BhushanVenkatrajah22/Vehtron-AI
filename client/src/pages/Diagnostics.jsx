@@ -24,31 +24,34 @@ const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
 
   h1 {
-    font-size: 2rem;
+    font-size: 2.2rem;
     color: var(--text-primary);
   }
 
   p {
     color: var(--text-secondary);
-    font-size: 0.9rem;
+    font-size: 1.1rem;
+    font-family: 'Space Grotesk', sans-serif;
   }
 `;
 
 const StatusBadge = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
+  gap: 0.75rem;
+  padding: 0.6rem 1.25rem;
   border-radius: 20px;
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Inter', monospace;
   font-size: 0.85rem;
-  font-weight: 500;
-  background: ${props => props.active ? 'rgba(34, 211, 238, 0.1)' : 'rgba(255, 255, 255, 0.05)'};
+  font-weight: 600;
+  letter-spacing: 1px;
+  background: ${props => props.active ? 'rgba(34, 211, 238, 0.1)' : 'rgba(255, 255, 255, 0.03)'};
   color: ${props => props.active ? 'var(--accent-cyan)' : 'var(--text-secondary)'};
   border: 1px solid ${props => props.active ? 'rgba(34, 211, 238, 0.3)' : 'rgba(255, 255, 255, 0.1)'};
+  box-shadow: ${props => props.active ? 'var(--glow-cyan)' : 'none'};
 `;
 
 const DashboardGrid = styled.div`
@@ -62,7 +65,7 @@ const DashboardGrid = styled.div`
 `;
 
 const ScannerCard = styled.div`
-  background: var(--bg-secondary);
+  background: var(--glass-bg);
   border: 1px solid var(--glass-border);
   border-radius: 24px;
   height: 500px;
@@ -72,8 +75,9 @@ const ScannerCard = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 `;
 
 const ScanLine = styled.div`
@@ -227,196 +231,196 @@ const AlertCard = styled.div`
 `;
 
 const Diagnostics = () => {
-    const [isScanning, setIsScanning] = useState(false);
-    const [isConnected, setIsConnected] = useState(false);
-    const [data, setData] = useState({
-        rpm: 0,
-        speed: 0,
-        temp: 0,
-        voltage: 0,
-        oilPressure: 0,
-        engineLoad: 0,
-        massAirFlow: 0,
-        fuelLevel: 0
-    });
+  const [isScanning, setIsScanning] = useState(false);
+  const [isConnected, setIsConnected] = useState(false);
+  const [data, setData] = useState({
+    rpm: 0,
+    speed: 0,
+    temp: 0,
+    voltage: 0,
+    oilPressure: 0,
+    engineLoad: 0,
+    massAirFlow: 0,
+    fuelLevel: 0
+  });
 
-    const startScan = () => {
-        setIsScanning(true);
-        setTimeout(() => {
-            setIsScanning(false);
-            setIsConnected(true);
-        }, 3500);
-    };
+  const startScan = () => {
+    setIsScanning(true);
+    setTimeout(() => {
+      setIsScanning(false);
+      setIsConnected(true);
+    }, 3500);
+  };
 
-    useEffect(() => {
-        if (isConnected) {
-            const interval = setInterval(() => {
-                setData({
-                    rpm: Math.floor(1800 + Math.random() * 200),
-                    speed: Math.floor(65 + Math.random() * 5),
-                    temp: 88 + Math.floor(Math.random() * 3),
-                    voltage: (13.8 + Math.random() * 0.2).toFixed(1),
-                    oilPressure: 42 + Math.floor(Math.random() * 5),
-                    engineLoad: 35 + Math.floor(Math.random() * 10),
-                    massAirFlow: (12.4 + Math.random()).toFixed(1),
-                    fuelLevel: 78
-                });
-            }, 800);
-            return () => clearInterval(interval);
-        }
-    }, [isConnected]);
+  useEffect(() => {
+    if (isConnected) {
+      const interval = setInterval(() => {
+        setData({
+          rpm: Math.floor(1800 + Math.random() * 200),
+          speed: Math.floor(65 + Math.random() * 5),
+          temp: 88 + Math.floor(Math.random() * 3),
+          voltage: (13.8 + Math.random() * 0.2).toFixed(1),
+          oilPressure: 42 + Math.floor(Math.random() * 5),
+          engineLoad: 35 + Math.floor(Math.random() * 10),
+          massAirFlow: (12.4 + Math.random()).toFixed(1),
+          fuelLevel: 78
+        });
+      }, 800);
+      return () => clearInterval(interval);
+    }
+  }, [isConnected]);
 
-    const containerVariants = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: { staggerChildren: 0.1 }
-        }
-    };
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1 }
+    }
+  };
 
-    const itemVariants = {
-        hidden: { opacity: 0, y: 20 },
-        visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 300, damping: 24 } }
-    };
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 300, damping: 24 } }
+  };
 
-    return (
-        <PageContainer initial="hidden" animate="visible" variants={containerVariants}>
-            <Header>
+  return (
+    <PageContainer initial="hidden" animate="visible" variants={containerVariants}>
+      <Header>
+        <div>
+          <h1>System Diagnostics</h1>
+          <p>Real-time OBD-II telemetry and system analysis</p>
+        </div>
+        <StatusBadge active={isConnected || isScanning}>
+          {isConnected ? <CheckCircle size={16} /> : isScanning ? <RefreshCw className="spin" size={16} /> : <Database size={16} />}
+          {isConnected ? 'LIVE CONNECTION' : isScanning ? 'ESTABLISHING LINK...' : 'DISCONNECTED'}
+        </StatusBadge>
+      </Header>
+
+      <DashboardGrid>
+        <ScannerCard>
+          <HexGrid />
+          {isScanning && <ScanLine />}
+
+          <AnimatePresence mode="wait">
+            {!isConnected && !isScanning && (
+              <motion.div
+                key="disconnected"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                style={{ textAlign: 'center', zIndex: 20, display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+              >
+                <Bluetooth size={48} color="var(--text-muted)" style={{ marginBottom: '1.5rem' }} />
+                <h3 style={{ color: 'var(--text-primary)', marginBottom: '0.5rem', fontSize: '1.25rem' }}>Awaiting Connection</h3>
+                <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', maxWidth: '200px' }}>Connect to vehicle OBD-II port to stream live telemetry.</p>
+                <Button onClick={startScan}>
+                  Initialize Link
+                </Button>
+              </motion.div>
+            )}
+
+            {isScanning && (
+              <motion.div
+                key="scanning"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                style={{ textAlign: 'center', zIndex: 20, display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+              >
+                <Server className="spin" size={48} color="var(--accent-cyan)" style={{ marginBottom: '1.5rem' }} />
+                <h3 style={{ color: 'var(--accent-cyan)', marginBottom: '0.5rem', fontSize: '1.25rem' }}>Handshaking...</h3>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Negotiating protocol ISO 15765-4</p>
+                <Button className="scanning">
+                  Abort Sequence
+                </Button>
+              </motion.div>
+            )}
+
+            {isConnected && (
+              <motion.div
+                key="connected"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                style={{ width: '100%', height: '100%', padding: '2rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', zIndex: 20 }}
+              >
                 <div>
-                    <h1>System Diagnostics</h1>
-                    <p>Real-time OBD-II telemetry and system analysis</p>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--accent-cyan)', marginBottom: '1rem' }}>
+                    <Activity size={20} />
+                    <span style={{ fontWeight: '600', letterSpacing: '1px' }}>LINK ESTABLISHED</span>
+                  </div>
+                  <h2 style={{ fontSize: '2.5rem', margin: 0 }}>VIN READ</h2>
+                  <p style={{ color: 'var(--text-secondary)', fontFamily: 'monospace', fontSize: '1.1rem', letterSpacing: '2px', marginTop: '0.5rem' }}>
+                    1HGCM82633A004XXX
+                  </p>
                 </div>
-                <StatusBadge active={isConnected || isScanning}>
-                    {isConnected ? <CheckCircle size={16} /> : isScanning ? <RefreshCw className="spin" size={16} /> : <Database size={16} />}
-                    {isConnected ? 'LIVE CONNECTION' : isScanning ? 'ESTABLISHING LINK...' : 'DISCONNECTED'}
-                </StatusBadge>
-            </Header>
 
-            <DashboardGrid>
-                <ScannerCard>
-                    <HexGrid />
-                    {isScanning && <ScanLine />}
+                <div style={{ background: 'rgba(0,0,0,0.2)', padding: '1.5rem', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                    <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Protocol</span>
+                    <span style={{ color: 'var(--text-primary)', fontWeight: '500', fontSize: '0.9rem' }}>CAN 11/500</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                    <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>ECU Latency</span>
+                    <span style={{ color: 'var(--accent-cyan)', fontWeight: '500', fontSize: '0.9rem' }}>12ms</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Data Rate</span>
+                    <span style={{ color: 'var(--text-primary)', fontWeight: '500', fontSize: '0.9rem' }}>42 PIDs/sec</span>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </ScannerCard>
 
-                    <AnimatePresence mode="wait">
-                        {!isConnected && !isScanning && (
-                            <motion.div
-                                key="disconnected"
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                exit={{ opacity: 0, scale: 0.9 }}
-                                style={{ textAlign: 'center', zIndex: 20, display: 'flex', flexDirection: 'column', alignItems: 'center' }}
-                            >
-                                <Bluetooth size={48} color="var(--text-muted)" style={{ marginBottom: '1.5rem' }} />
-                                <h3 style={{ color: 'var(--text-primary)', marginBottom: '0.5rem', fontSize: '1.25rem' }}>Awaiting Connection</h3>
-                                <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', maxWidth: '200px' }}>Connect to vehicle OBD-II port to stream live telemetry.</p>
-                                <Button onClick={startScan}>
-                                    Initialize Link
-                                </Button>
-                            </motion.div>
-                        )}
+        <MetricsGrid>
+          <MetricCard variants={itemVariants} color="#3b82f6">
+            <MetricHeader color="#3b82f6"><Gauge size={18} /> Engine Speed</MetricHeader>
+            <MetricValue>{isConnected ? data.rpm : '--'} <span>RPM</span></MetricValue>
+            <ProgressBar color="#3b82f6" progress={isConnected ? (data.rpm / 8000) * 100 : 0} />
+          </MetricCard>
 
-                        {isScanning && (
-                            <motion.div
-                                key="scanning"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                style={{ textAlign: 'center', zIndex: 20, display: 'flex', flexDirection: 'column', alignItems: 'center' }}
-                            >
-                                <Server className="spin" size={48} color="var(--accent-cyan)" style={{ marginBottom: '1.5rem' }} />
-                                <h3 style={{ color: 'var(--accent-cyan)', marginBottom: '0.5rem', fontSize: '1.25rem' }}>Handshaking...</h3>
-                                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Negotiating protocol ISO 15765-4</p>
-                                <Button className="scanning">
-                                    Abort Sequence
-                                </Button>
-                            </motion.div>
-                        )}
+          <MetricCard variants={itemVariants} color="#10b981">
+            <MetricHeader color="#10b981"><Zap size={18} /> Vehicle Speed</MetricHeader>
+            <MetricValue>{isConnected ? data.speed : '--'} <span>KM/H</span></MetricValue>
+            <ProgressBar color="#10b981" progress={isConnected ? (data.speed / 220) * 100 : 0} />
+          </MetricCard>
 
-                        {isConnected && (
-                            <motion.div
-                                key="connected"
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                style={{ width: '100%', height: '100%', padding: '2rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', zIndex: 20 }}
-                            >
-                                <div>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--accent-cyan)', marginBottom: '1rem' }}>
-                                        <Activity size={20} />
-                                        <span style={{ fontWeight: '600', letterSpacing: '1px' }}>LINK ESTABLISHED</span>
-                                    </div>
-                                    <h2 style={{ fontSize: '2.5rem', margin: 0 }}>VIN READ</h2>
-                                    <p style={{ color: 'var(--text-secondary)', fontFamily: 'monospace', fontSize: '1.1rem', letterSpacing: '2px', marginTop: '0.5rem' }}>
-                                        1HGCM82633A004XXX
-                                    </p>
-                                </div>
+          <MetricCard variants={itemVariants} color="#f59e0b">
+            <MetricHeader color="#f59e0b"><Thermometer size={18} /> Coolant Temp</MetricHeader>
+            <MetricValue>{isConnected ? data.temp : '--'} <span>°C</span></MetricValue>
+            <ProgressBar color="#f59e0b" progress={isConnected ? (data.temp / 120) * 100 : 0} />
+          </MetricCard>
 
-                                <div style={{ background: 'rgba(0,0,0,0.2)', padding: '1.5rem', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                                        <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Protocol</span>
-                                        <span style={{ color: 'var(--text-primary)', fontWeight: '500', fontSize: '0.9rem' }}>CAN 11/500</span>
-                                    </div>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                                        <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>ECU Latency</span>
-                                        <span style={{ color: 'var(--accent-cyan)', fontWeight: '500', fontSize: '0.9rem' }}>12ms</span>
-                                    </div>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                        <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Data Rate</span>
-                                        <span style={{ color: 'var(--text-primary)', fontWeight: '500', fontSize: '0.9rem' }}>42 PIDs/sec</span>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-                </ScannerCard>
+          <MetricCard variants={itemVariants} color="#8b5cf6">
+            <MetricHeader color="#8b5cf6"><Battery size={18} /> Battery Voltage</MetricHeader>
+            <MetricValue>{isConnected ? data.voltage : '--'} <span>V</span></MetricValue>
+            <ProgressBar color="#8b5cf6" progress={isConnected ? (data.voltage / 16) * 100 : 0} />
+          </MetricCard>
 
-                <MetricsGrid>
-                    <MetricCard variants={itemVariants} color="#3b82f6">
-                        <MetricHeader color="#3b82f6"><Gauge size={18} /> Engine Speed</MetricHeader>
-                        <MetricValue>{isConnected ? data.rpm : '--'} <span>RPM</span></MetricValue>
-                        <ProgressBar color="#3b82f6" progress={isConnected ? (data.rpm / 8000) * 100 : 0} />
-                    </MetricCard>
+          <MetricCard variants={itemVariants} color="#ec4899">
+            <MetricHeader color="#ec4899"><Activity size={18} /> Engine Load</MetricHeader>
+            <MetricValue>{isConnected ? data.engineLoad : '--'} <span>%</span></MetricValue>
+            <ProgressBar color="#ec4899" progress={isConnected ? data.engineLoad : 0} />
+          </MetricCard>
 
-                    <MetricCard variants={itemVariants} color="#10b981">
-                        <MetricHeader color="#10b981"><Zap size={18} /> Vehicle Speed</MetricHeader>
-                        <MetricValue>{isConnected ? data.speed : '--'} <span>KM/H</span></MetricValue>
-                        <ProgressBar color="#10b981" progress={isConnected ? (data.speed / 220) * 100 : 0} />
-                    </MetricCard>
+          <MetricCard variants={itemVariants} color="#06b6d4">
+            <MetricHeader color="#06b6d4"><Database size={18} /> Mass Air Flow</MetricHeader>
+            <MetricValue>{isConnected ? data.massAirFlow : '--'} <span>g/s</span></MetricValue>
+            <ProgressBar color="#06b6d4" progress={isConnected ? (data.massAirFlow / 50) * 100 : 0} />
+          </MetricCard>
 
-                    <MetricCard variants={itemVariants} color="#f59e0b">
-                        <MetricHeader color="#f59e0b"><Thermometer size={18} /> Coolant Temp</MetricHeader>
-                        <MetricValue>{isConnected ? data.temp : '--'} <span>°C</span></MetricValue>
-                        <ProgressBar color="#f59e0b" progress={isConnected ? (data.temp / 120) * 100 : 0} />
-                    </MetricCard>
-
-                    <MetricCard variants={itemVariants} color="#8b5cf6">
-                        <MetricHeader color="#8b5cf6"><Battery size={18} /> Battery Voltage</MetricHeader>
-                        <MetricValue>{isConnected ? data.voltage : '--'} <span>V</span></MetricValue>
-                        <ProgressBar color="#8b5cf6" progress={isConnected ? (data.voltage / 16) * 100 : 0} />
-                    </MetricCard>
-
-                    <MetricCard variants={itemVariants} color="#ec4899">
-                        <MetricHeader color="#ec4899"><Activity size={18} /> Engine Load</MetricHeader>
-                        <MetricValue>{isConnected ? data.engineLoad : '--'} <span>%</span></MetricValue>
-                        <ProgressBar color="#ec4899" progress={isConnected ? data.engineLoad : 0} />
-                    </MetricCard>
-
-                    <MetricCard variants={itemVariants} color="#06b6d4">
-                        <MetricHeader color="#06b6d4"><Database size={18} /> Mass Air Flow</MetricHeader>
-                        <MetricValue>{isConnected ? data.massAirFlow : '--'} <span>g/s</span></MetricValue>
-                        <ProgressBar color="#06b6d4" progress={isConnected ? (data.massAirFlow / 50) * 100 : 0} />
-                    </MetricCard>
-
-                    <AlertCard as={motion.div} variants={itemVariants}>
-                        <Shield size={24} color="var(--accent-cyan)" style={{ flexShrink: 0, marginTop: '2px' }} />
-                        <div>
-                            <h4>System Status Nominal</h4>
-                            <p>No Diagnostic Trouble Codes (DTC) detected in the ECU. All emissions monitors are complete and passing.</p>
-                        </div>
-                    </AlertCard>
-                </MetricsGrid>
-            </DashboardGrid>
-        </PageContainer>
-    )
+          <AlertCard as={motion.div} variants={itemVariants}>
+            <Shield size={24} color="var(--accent-cyan)" style={{ flexShrink: 0, marginTop: '2px' }} />
+            <div>
+              <h4>System Status Nominal</h4>
+              <p>No Diagnostic Trouble Codes (DTC) detected in the ECU. All emissions monitors are complete and passing.</p>
+            </div>
+          </AlertCard>
+        </MetricsGrid>
+      </DashboardGrid>
+    </PageContainer>
+  )
 }
 
 export default Diagnostics
